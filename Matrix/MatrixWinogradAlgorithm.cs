@@ -1,4 +1,6 @@
-﻿namespace Matrix
+﻿using BenchmarkDotNet.Attributes;
+
+namespace Matrix
 {
     public static class MatrixWinogradAlgorithm
     {

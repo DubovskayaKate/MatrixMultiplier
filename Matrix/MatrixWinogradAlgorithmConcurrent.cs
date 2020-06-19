@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using BenchmarkDotNet.Attributes;
 
 namespace Matrix
 {
@@ -8,6 +9,7 @@ namespace Matrix
         private double[] RowFactor;
         private double[] ColumnFactor;
         private double[,] ResultMatrix;
+
         public async Task<double[,]> Multiply(double[,] srcMatrix1, double[,] srcMatrix2)
         {
             var tasks = new List<Task>
@@ -43,6 +45,15 @@ namespace Matrix
                             RowFactor[index] += srcMatrix1[index, 2 * j] * srcMatrix1[index, 2 * j + 1];
                         }
                     }));
+                if (tasks.Count > 3000)
+                {
+                    foreach (var task in tasks)
+                    {
+                        task.Start();
+                    }
+                    await Task.WhenAll(tasks);
+                    tasks.Clear();
+                }
             }
             foreach (var task in tasks)
             {
@@ -69,6 +80,15 @@ namespace Matrix
                             ColumnFactor[index] += srcMatrix2[2 * j, index] * srcMatrix2[2 * j + 1, index];
                         }
                     }));
+                if (tasks.Count > 3000)
+                {
+                    foreach (var task in tasks)
+                    {
+                        task.Start();
+                    }
+                    await Task.WhenAll(tasks);
+                    tasks.Clear();
+                }
             }
             foreach (var task in tasks)
             {
@@ -100,6 +120,15 @@ namespace Matrix
                                     (srcMatrix1[indexI, 2 * k + 1] + srcMatrix2[2 * k, indexJ]);
                             }
                         }));
+                }
+                if (tasks.Count > 3000)
+                {
+                    foreach (var task in tasks)
+                    {
+                        task.Start();
+                    }
+                    await Task.WhenAll(tasks);
+                    tasks.Clear();
                 }
             }
 
