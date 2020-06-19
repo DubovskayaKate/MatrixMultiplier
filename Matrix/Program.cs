@@ -21,6 +21,8 @@ namespace Matrix
             var matrix2 = MatrixImport.FromFile(srcPath2);
 
             var dist = MatrixWinogradAlgorithm.Multiply(matrix1, matrix2);
+
+            var dist2 = MatrixGeneralAlgorithm.Multiply(matrix1, matrix2);
             var result = MatrixExport.ToFile(dist, dstPath);
             if (result)
             {

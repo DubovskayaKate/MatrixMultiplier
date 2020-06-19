@@ -16,14 +16,14 @@
 
         private static double[] CalculateRowFactors(double[,] srcMatrix1)
         {
-            var rowFactor = new double[srcMatrix1.Length];
+            var rowFactor = new double[srcMatrix1.GetUpperBound(0) + 1];
 
             for (var i = 0; i <= srcMatrix1.GetUpperBound(0); ++i)
             {
                 rowFactor[i] = srcMatrix1[i, 0] * srcMatrix1[i, 1];
                 for (var j = 1; j < (srcMatrix1.GetUpperBound(1) + 1) / 2; ++j)
                 {
-                    rowFactor[i] = rowFactor[i] * srcMatrix1[i, 2 * j] * srcMatrix1[i, 2 * j + 1];
+                    rowFactor[i] += srcMatrix1[i, 2 * j] * srcMatrix1[i, 2 * j + 1];
                 }
             }
 
@@ -32,13 +32,13 @@
 
         private static double[] CalculateColumnFactors(double[,] srcMatrix2)
         {
-            var columnFactors = new double[srcMatrix2.Length];
+            var columnFactors = new double[srcMatrix2.GetUpperBound(0) + 1];
             for (int i = 0; i <= srcMatrix2.GetUpperBound(0); i++)
             {
                 columnFactors[i] = srcMatrix2[0, i] * srcMatrix2[1, i];
                 for (int j = 1; j < (srcMatrix2.GetUpperBound(1) + 1) / 2; j++)
                 {
-                    columnFactors[i] = columnFactors[i] + srcMatrix2[2 * j , i] * srcMatrix2[2 * j + 1, i];
+                    columnFactors[i] += srcMatrix2[2 * j , i] * srcMatrix2[2 * j + 1, i];
                 }
             }
 
@@ -56,13 +56,13 @@
                     resultMatrix[i, j] = -rowFactors[i] - columnFactors[j];
                     for (int k = 0; k < (srcMatrix2.GetUpperBound(1) + 1) / 2; k++)
                     {
-                        resultMatrix[i, j] = resultMatrix[i, j] + (srcMatrix1[i, 2 * k] + srcMatrix2[2 * k + 1, j]) *
+                        resultMatrix[i, j] += (srcMatrix1[i, 2 * k] + srcMatrix2[2 * k + 1, j]) *
                                              (srcMatrix1[i, 2 * k + 1] + srcMatrix2[2 * k, j]);
                     }
                 }
             }
 
-            if ((srcMatrix1.GetUpperBound(1) & 1) == 1)
+            if ((srcMatrix1.GetUpperBound(1) & 1) == 0)
             {
                 for (int i = 0; i <= srcMatrix1.GetUpperBound(0); i++)
                 {
