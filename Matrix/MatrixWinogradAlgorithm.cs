@@ -9,11 +9,6 @@
             return CalculateMultiply(srcMatrix1, srcMatrix2, rowFactor, columnFactor);
         }
 
-        public static double[,] MultiplyThreads(double[,] srcMatrix1, double[,] srcMatrix2)
-        {
-            return srcMatrix1;
-        }
-
         private static double[] CalculateRowFactors(double[,] srcMatrix1)
         {
             var rowFactor = new double[srcMatrix1.GetUpperBound(0) + 1];
