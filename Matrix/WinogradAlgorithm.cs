@@ -1,8 +1,6 @@
-﻿using BenchmarkDotNet.Attributes;
-
-namespace Matrix
+﻿namespace Matrix
 {
-    public static class MatrixWinogradAlgorithm
+    public static class WinogradAlgorithm
     {
         public static double[,] Multiply(double[,] srcMatrix1, double[,] srcMatrix2 )
         {
@@ -65,8 +63,8 @@ namespace Matrix
                 {
                     for (int j = 0; j <= srcMatrix2.GetUpperBound(0); j++)
                     {
-                        resultMatrix[i, j] = resultMatrix[i, j] +
-                                             srcMatrix1[i, srcMatrix1.GetUpperBound(1)] * srcMatrix2[srcMatrix2.GetUpperBound(0), j];
+                        resultMatrix[i, j] += srcMatrix1[i, srcMatrix1.GetUpperBound(1)] 
+                                              * srcMatrix2[srcMatrix2.GetUpperBound(0), j];
                     }
                 }
             }

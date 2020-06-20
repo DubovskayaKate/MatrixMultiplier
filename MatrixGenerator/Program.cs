@@ -13,14 +13,9 @@ namespace MatrixGenerator
             var size = Convert.ToInt32(Console.ReadLine());
 
             var matrix = GenerateMatrix(size);
-            if (MatrixIO.MatrixExport.ToFile(matrix, filePath))
-            {
-                Console.WriteLine("File successfully created");
-            }
-            else
-            {
-                Console.WriteLine("Can't write matrix to file");
-            }
+            Console.WriteLine(MatrixIO.MatrixExport.ToFile(matrix, filePath)
+                ? "File successfully created"
+                : "Can't save matrix to file");
         }
 
         static double[,] GenerateMatrix(int size)
