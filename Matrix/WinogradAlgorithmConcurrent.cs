@@ -5,6 +5,8 @@ namespace Matrix
 {
     public class WinogradAlgorithmConcurrent
     {
+        private const int TasksUpperBound = 3000;
+
         private double[] _rowFactor;
         private double[] _columnFactor;
         private double[,] _resultMatrix;
@@ -34,6 +36,7 @@ namespace Matrix
 
             for (var i = 0; i <= srcMatrix1.GetUpperBound(0); ++i)
             {
+                // For correct closure, each Task has its own correct i-value
                 var index = i;
                 tasks.Add(
                     new Task(() =>
@@ -46,7 +49,7 @@ namespace Matrix
                     })
                 );
 
-                if (tasks.Count > 3000)
+                if (tasks.Count > TasksUpperBound)
                 {
                     foreach (var task in tasks)
                     {
@@ -72,6 +75,7 @@ namespace Matrix
 
             for (var i = 0; i <= srcMatrix2.GetUpperBound(0); i++)
             {
+                // For correct closure, each Task has own correct i-value
                 var index = i;
                 tasks.Add(
                     new Task(() =>
@@ -84,7 +88,7 @@ namespace Matrix
                     })
                 );
 
-                if (tasks.Count > 3000)
+                if (tasks.Count > TasksUpperBound)
                 {
                     foreach (var task in tasks)
                     {
@@ -112,6 +116,7 @@ namespace Matrix
             {
                 for (var j = 0; j <= srcMatrix2.GetUpperBound(0); j++)
                 {
+                    // For correct closure, each Task has its own correct i and j value
                     var indexI = i;
                     var indexJ = j;
                     tasks.Add(
@@ -128,7 +133,7 @@ namespace Matrix
                     );
                 }
 
-                if (tasks.Count > 3000)
+                if (tasks.Count > TasksUpperBound)
                 {
                     foreach (var task in tasks)
                     {
@@ -151,6 +156,7 @@ namespace Matrix
             {
                 for (var i = 0; i <= srcMatrix1.GetUpperBound(0); i++)
                 {
+                    // For correct closure, each Task has its own correct i-value
                     var indexI = i;
                     tasks.Add(
                         new Task(() =>

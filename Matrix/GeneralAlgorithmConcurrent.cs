@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 namespace Matrix
 {
     public static class GeneralAlgorithmConcurrent
-    { 
+    {
+        private const int TasksUpperBound = 3000;
         public static async Task<double[,]> Multiply(double[,] srcMatrix1, double[,] srcMatrix2)
         {
             var tasks = new List<Task>();
@@ -12,6 +13,7 @@ namespace Matrix
             var resultMatrix = new double[srcMatrix1.GetUpperBound(0) + 1, srcMatrix2.GetUpperBound(1) + 1];
             for (var i = 0; i <= srcMatrix1.GetUpperBound(0); i++)
             {
+                // For correct closure, each Task has its own correct i-value
                 var indexI = i;
                 tasks.Add(
                     new Task(() =>
@@ -27,7 +29,7 @@ namespace Matrix
                     })
                 );
 
-                if (tasks.Count > 3000)
+                if (tasks.Count > TasksUpperBound)
                 {
                     foreach (var task in tasks)
                     {
