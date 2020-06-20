@@ -70,14 +70,14 @@ namespace Matrix
             _columnFactor = new double[srcMatrix2.GetUpperBound(0) + 1];
             var tasks = new List<Task>();
 
-            for (int i = 0; i <= srcMatrix2.GetUpperBound(0); i++)
+            for (var i = 0; i <= srcMatrix2.GetUpperBound(0); i++)
             {
                 var index = i;
                 tasks.Add(
                     new Task(() =>
                     {
                         _columnFactor[index] = srcMatrix2[0, index] * srcMatrix2[1, index];
-                        for (int j = 1; j < (srcMatrix2.GetUpperBound(1) + 1) / 2; j++)
+                        for (var j = 1; j < (srcMatrix2.GetUpperBound(1) + 1) / 2; j++)
                         {
                             _columnFactor[index] += srcMatrix2[2 * j, index] * srcMatrix2[2 * j + 1, index];
                         }
@@ -108,9 +108,9 @@ namespace Matrix
             _resultMatrix = new double[srcMatrix1.GetUpperBound(0) + 1, srcMatrix2.GetUpperBound(0) + 1];
             var tasks = new List<Task>();
 
-            for (int i = 0; i <= srcMatrix1.GetUpperBound(0); i++)
+            for (var i = 0; i <= srcMatrix1.GetUpperBound(0); i++)
             {
-                for (int j = 0; j <= srcMatrix2.GetUpperBound(0); j++)
+                for (var j = 0; j <= srcMatrix2.GetUpperBound(0); j++)
                 {
                     var indexI = i;
                     var indexJ = j;
@@ -118,7 +118,7 @@ namespace Matrix
                         new Task(() =>
                         {
                             _resultMatrix[indexI, indexJ] = -rowFactors[indexI] - columnFactors[indexJ];
-                            for (int k = 0; k < (srcMatrix2.GetUpperBound(1) + 1) / 2; k++)
+                            for (var k = 0; k < (srcMatrix2.GetUpperBound(1) + 1) / 2; k++)
                             {
                                 _resultMatrix[indexI, indexJ] +=
                                     (srcMatrix1[indexI, 2 * k] + srcMatrix2[2 * k + 1, indexJ]) *
@@ -149,13 +149,13 @@ namespace Matrix
 
             if ((srcMatrix1.GetUpperBound(1) & 1) == 0)
             {
-                for (int i = 0; i <= srcMatrix1.GetUpperBound(0); i++)
+                for (var i = 0; i <= srcMatrix1.GetUpperBound(0); i++)
                 {
                     var indexI = i;
                     tasks.Add(
                         new Task(() =>
                         {
-                            for (int j = 0; j <= srcMatrix2.GetUpperBound(0); j++)
+                            for (var j = 0; j <= srcMatrix2.GetUpperBound(0); j++)
                             {
                                 _resultMatrix[indexI, j] += srcMatrix1[indexI, srcMatrix1.GetUpperBound(1)] *
                                                             srcMatrix2[srcMatrix2.GetUpperBound(0), j];

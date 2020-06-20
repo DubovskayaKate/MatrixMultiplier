@@ -14,8 +14,6 @@ namespace Matrix
     {
         static async Task Main(string[] args)
         {
-            
-            //#region IO
             //Console.WriteLine("Enter file path for the first matrix");
             //var srcPath1 = Console.ReadLine();
 
@@ -24,9 +22,6 @@ namespace Matrix
 
             //Console.WriteLine("Enter file path for the result");
             //var dstPath = Console.ReadLine();
-
-
-            //#endregion
             
             //var matrix1 = MatrixImport.FromFile(srcPath1);
             //var matrix2 = MatrixImport.FromFile(srcPath2);
@@ -39,14 +34,14 @@ namespace Matrix
             //if (result)
             //{
             //    Console.WriteLine("Success");
-            //    /*for (int i = 0; i <= dist.GetUpperBound(0); i++)
+            //    for (int i = 0; i <= dist.GetUpperBound(0); i++)
             //    {
             //        for (int j = 0; j < dist.GetUpperBound(1); j++)
             //        {
             //            Console.Write($"{dist[i, j]}");
             //        }
             //        Console.WriteLine();
-            //    }*/
+            //    }
             //}
 
             var summary = BenchmarkRunner.Run(typeof(Program).Assembly);
@@ -59,9 +54,9 @@ namespace Matrix
     {
         public struct DataIO
         {
-            public string srcPath1;
-            public string srcPath2;
-            public string dstPath;
+            public string SrcPath1;
+            public string SrcPath2;
+            public string DstPath;
         }
 
         [ParamsSource(nameof(ListOfDataIO))]
@@ -72,42 +67,42 @@ namespace Matrix
 
         public IEnumerable<DataIO> ListOfDataIO => new List<DataIO>
         {
+            //new DataIO
+            //{
+            //    srcPath1 = "C:/_MyFiles/TestFiles/5.txt",
+            //    srcPath2 = "C:/_MyFiles/TestFiles/5.txt",
+            //    dstPath = "C:/_MyFiles/TestFiles/res.txt"
+            //},
+            //new DataIO
+            //{
+            //    srcPath1 = "C:/_MyFiles/TestFiles/10.txt",
+            //    srcPath2 = "C:/_MyFiles/TestFiles/10.txt",
+            //    dstPath = "C:/_MyFiles/TestFiles/res.txt"
+            //},
+            //new DataIO
+            //{
+            //    srcPath1 = "C:/_MyFiles/TestFiles/50.txt",
+            //    srcPath2 = "C:/_MyFiles/TestFiles/50.txt",
+            //    dstPath = "C:/_MyFiles/TestFiles/res.txt"
+            //},
+            //new DataIO
+            //{
+            //    srcPath1 = "C:/_MyFiles/TestFiles/100.txt",
+            //    srcPath2 = "C:/_MyFiles/TestFiles/100.txt",
+            //    dstPath = "C:/_MyFiles/TestFiles/res.txt"
+            //},
+            //new DataIO
+            //{
+            //    srcPath1 = "C:/_MyFiles/TestFiles/500.txt",
+            //    srcPath2 = "C:/_MyFiles/TestFiles/500.txt",
+            //    dstPath = "C:/_MyFiles/TestFiles/res.txt"
+            //},
             new DataIO
             {
-                srcPath1 = "C:/_MyFiles/TestFiles/5.txt",
-                srcPath2 = "C:/_MyFiles/TestFiles/5.txt",
-                dstPath = "C:/_MyFiles/TestFiles/res.txt"
-            },
-            new DataIO
-            {
-                srcPath1 = "C:/_MyFiles/TestFiles/10.txt",
-                srcPath2 = "C:/_MyFiles/TestFiles/10.txt",
-                dstPath = "C:/_MyFiles/TestFiles/res.txt"
-            },
-            new DataIO
-            {
-                srcPath1 = "C:/_MyFiles/TestFiles/50.txt",
-                srcPath2 = "C:/_MyFiles/TestFiles/50.txt",
-                dstPath = "C:/_MyFiles/TestFiles/res.txt"
-            },
-            new DataIO
-            {
-                srcPath1 = "C:/_MyFiles/TestFiles/100.txt",
-                srcPath2 = "C:/_MyFiles/TestFiles/100.txt",
-                dstPath = "C:/_MyFiles/TestFiles/res.txt"
-            },
-            /*new DataIO
-            {
-                srcPath1 = "C:/_MyFiles/TestFiles/500.txt",
-                srcPath2 = "C:/_MyFiles/TestFiles/500.txt",
-                dstPath = "C:/_MyFiles/TestFiles/res.txt"
-            },
-            new DataIO
-            {
-                srcPath1 = "C:/_MyFiles/TestFiles/1000.txt",
-                srcPath2 = "C:/_MyFiles/TestFiles/1000.txt",
-                dstPath = "C:/_MyFiles/TestFiles/res.txt"
-            }*/
+                SrcPath1 = "C:/_MyFiles/TestFiles/1000.txt",
+                SrcPath2 = "C:/_MyFiles/TestFiles/1000.txt",
+                DstPath = "C:/_MyFiles/TestFiles/res.txt"
+            }
         };
 
         private double[,] srcMatrix1;
@@ -116,8 +111,8 @@ namespace Matrix
         [GlobalSetup]
         public void Setup()
         {
-            srcMatrix1 = MatrixImport.FromFile(DataIo.srcPath1);
-            srcMatrix2 = MatrixImport.FromFile(DataIo.srcPath2);
+            srcMatrix1 = MatrixImport.FromFile(DataIo.SrcPath1);
+            srcMatrix2 = MatrixImport.FromFile(DataIo.SrcPath2);
         }
         
         [Benchmark]
@@ -147,37 +142,37 @@ namespace Matrix
         [Benchmark]
         public void WinogradMultiplyWithIO()
         {
-            var matrix1 = MatrixImport.FromFile(DataIo.srcPath1);
-            var matrix2 = MatrixImport.FromFile(DataIo.srcPath2);
+            var matrix1 = MatrixImport.FromFile(DataIo.SrcPath1);
+            var matrix2 = MatrixImport.FromFile(DataIo.SrcPath2);
             var dstMatrix = WinogradAlgorithm.Multiply(matrix1, matrix2);
-            MatrixExport.ToFile(dstMatrix, DataIo.dstPath);
+            MatrixExport.ToFile(dstMatrix, DataIo.DstPath);
         }
 
         [Benchmark]
         public async Task WinogradMultiplyConcurrentWithIO()
         {
-            var matrix1 = MatrixImport.FromFile(DataIo.srcPath1);
-            var matrix2 = MatrixImport.FromFile(DataIo.srcPath2);
+            var matrix1 = MatrixImport.FromFile(DataIo.SrcPath1);
+            var matrix2 = MatrixImport.FromFile(DataIo.SrcPath2);
             var dstMatrix = await WinogradMultiplyObj.Multiply(matrix1, matrix2);
-            MatrixExport.ToFile(dstMatrix, DataIo.dstPath);
+            MatrixExport.ToFile(dstMatrix, DataIo.DstPath);
         }
 
         [Benchmark]
         public void GeneralMultiplyWithIO()
         {
-            var matrix1 = MatrixImport.FromFile(DataIo.srcPath1);
-            var matrix2 = MatrixImport.FromFile(DataIo.srcPath2);
+            var matrix1 = MatrixImport.FromFile(DataIo.SrcPath1);
+            var matrix2 = MatrixImport.FromFile(DataIo.SrcPath2);
             var dstMatrix = GeneralAlgorithm.Multiply(matrix1, matrix2);
-            MatrixExport.ToFile(dstMatrix, DataIo.dstPath);
+            MatrixExport.ToFile(dstMatrix, DataIo.DstPath);
         }
 
         [Benchmark]
         public async Task GeneralMultiplyConcurrentWithIO()
         {
-            var matrix1 = MatrixImport.FromFile(DataIo.srcPath1);
-            var matrix2 = MatrixImport.FromFile(DataIo.srcPath2);
+            var matrix1 = MatrixImport.FromFile(DataIo.SrcPath1);
+            var matrix2 = MatrixImport.FromFile(DataIo.SrcPath2);
             var dstMatrix = await GeneralAlgorithmConcurrent.Multiply(matrix1, matrix2);
-            MatrixExport.ToFile(dstMatrix, DataIo.dstPath);
+            MatrixExport.ToFile(dstMatrix, DataIo.DstPath);
         }
     }
 }
